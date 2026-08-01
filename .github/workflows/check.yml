@@ -1,25 +1,21 @@
-name: deploy
+name: check
 
-# Пуш в main заливает содержимое site/ на сервер.
-# Secrets: SSH_HOST, SSH_USER, SSH_KEY (приватный ключ), TARGET_PATH (напр. /srv/juno-trading-party/site)
+# Cloudflare Pages деплоит сам из git. Здесь только проверки,
+# чтобы сломанный перевод не уехал в прод.
 
 on:
   push:
     branches: [main]
-    paths: ["site/**", ".github/workflows/deploy.yml"]
+  pull_request:
   workflow_dispatch:
 
-concurrency:
-  group: deploy
-  cancel-in-progress: true
-
 jobs:
-  deploy:
+  copy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Проверить, что словари RU и KZ совпадают
+      - name: Словари RU и KZ совпадают и не пустые
         run: |
           cd site
           node -e "
@@ -37,14 +33,14 @@ jobs:
             console.log('Словари в порядке:', ru.length, 'ключей');
           "
 
-      - name: Проверить, что все data-i18n находят перевод
+      - name: Все data-i18n находят перевод
         run: |
           cd site
           node -e "
             global.window = {};
             require('./assets/js/copy.js');
             const fs = require('fs');
-            let bad = [];
+            const bad = [];
             for (const f of ['index.html','terms.html']) {
               const html = fs.readFileSync(f, 'utf8');
               for (const m of html.matchAll(/data-i18n=\"([^\"]+)\"/g))
@@ -53,16 +49,3 @@ jobs:
             if (bad.length) { console.error('Нет перевода:', bad); process.exit(1); }
             console.log('Все ключи разрешаются');
           "
-
-      - name: Настроить SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
-
-      - name: Залить site/ на сервер
-        run: |
-          rsync -avz --delete \
-            -e "ssh -i ~/.ssh/id_ed25519" \
-            site/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.TARGET_PATH }}/"

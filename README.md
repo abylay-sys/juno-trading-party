@@ -1,11 +1,11 @@
 # Trading Party — лендинг и креативы
 
-Кампания реактивации клиентов Juno Markets в Казахстане.
-Схема согласована с Борисом 26.07.2026: свой сервер + свой GitHub, домен вида `promo.junomarkets.kz` вешает Juno.
+Лендинг кампании Juno Markets в Казахстане и креативы к ней.
+Статика: HTML, CSS и немного JS, без сборки. Хостинг — Cloudflare Pages, деплой из `main`.
 
 ```
 juno-trading-party/
-├─ site/                    ← то, что уезжает на сервер
+├─ site/                    ← то, что публикуется
 │  ├─ index.html            лендинг (собирается скриптом, правится руками)
 │  ├─ terms.html            полные условия конкурса (черновик)
 │  └─ assets/
@@ -56,48 +56,28 @@ ruby -run -e httpd juno-trading-party/site -p 8108
 
 Либо через `.claude/launch.json` — конфигурация `juno-trading-party` уже добавлена.
 
-## Деплой на свой сервер
+## Деплой
 
-Разовая настройка на VPS (Ubuntu, от $5/мес):
+Хостинг — **Cloudflare Pages**, подключён к этому репозиторию. Настройки сборки:
 
-```bash
-sudo apt update && sudo apt install -y nginx git
-sudo mkdir -p /var/www/promo && sudo chown -R $USER:$USER /var/www/promo
-git clone git@github.com:<твой-аккаунт>/juno-trading-party.git /srv/juno-trading-party
-ln -s /srv/juno-trading-party/site /var/www/promo/current
-```
+| Параметр | Значение |
+|---|---|
+| Build command | пусто |
+| Build output directory | `site` |
+| Framework preset | None |
 
-Конфиг nginx — `/etc/nginx/sites-available/promo`:
+Любой пуш в `main` пересобирает прод, пуш в другую ветку даёт превью-ссылку.
+Перед деплоем GitHub Actions проверяет, что словари RU и KZ совпадают и что все
+`data-i18n` находят перевод — сломанный перевод в прод не уедет.
 
-```nginx
-server {
-    listen 80;
-    server_name promo.junomarkets.kz;
-    root /var/www/promo/current;
-    index index.html;
-    location / { try_files $uri $uri/ =404; }
-    location ~* \.(css|js|svg|png|woff2)$ { expires 7d; add_header Cache-Control "public"; }
-}
-```
+Свой домен подключается в Pages → Custom domains; нужна одна DNS-запись
+(CNAME на `<project>.pages.dev`). HTTPS и сертификат Cloudflare выпускает сам.
+
+Локально:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/promo /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
-sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d promo.junomarkets.kz
+ruby -run -e httpd site -p 8108
 ```
-
-Дальше обновление сайта — один `git pull` на сервере, либо автодеплой ниже.
-
-### Что попросить у Juno
-
-- **Umang Ravel** (DevOps) — A-запись `promo.junomarkets.kz` → IP твоего сервера. Домен выбирает Борис, у него их ~30–50
-- **Matt** (бэк-офис) — оплата $800 платформе конкурса; после оплаты ты работаешь с вендором напрямую и получаешь ссылку на форму для `registrationUrl`
-
-### Автодеплой
-
-В репозитории лежит `.github/workflows/deploy.yml` — пуш в `main` заливает `site/` на сервер по SSH.
-Нужно один раз добавить в Settings → Secrets: `SSH_HOST`, `SSH_USER`, `SSH_KEY`, `TARGET_PATH`.
 
 ## Креативы
 
@@ -133,4 +113,4 @@ sudo certbot --nginx -d promo.junomarkets.kz
 
 - **Метод ранжирования** не выбран (ROI / прибыль / совокупный балл). Тексты написаны так, чтобы быть верными при любом: лимиты риска — условие допуска, среди прошедших побеждает лучший результат. Если возьмём чистый ROI на демо-счёте с фиксированным стартом — он математически совпадает с ранжированием по прибыли
 - **`terms.html` — черновик**, не согласован с юристами. Незаполненное помечено оранжевым `[уточнить]`
-- **Призовой фонд** пересчитан, см. `~/Desktop/Juno/Trading_Party_Economics_2026-08-01.md` — старая формулировка «топ-25% first come first serve» заменена на «первые 50, выполнившие челлендж»
+- **Призовой фонд** пересчитан: формулировка «топ-25% first come first serve» заменена на «первые 50, выполнившие челлендж» — так бонусный пул ограничен абсолютным числом и не растёт вместе с конверсией
