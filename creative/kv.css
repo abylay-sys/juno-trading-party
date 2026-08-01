@@ -1,0 +1,227 @@
+/* Trading Party — визуальная система
+   Построена на бренд-буке JunoMarkets: #FF6900 основной, #777777 вспомогательный.
+   Приоритет цвета: оранжевый > белый > чёрный. */
+
+:root {
+  --juno-orange: #FF6900;
+  --juno-orange-lift: #FF8A3D;
+  --juno-grey: #777777;
+  --juno-black: #000000;
+  --juno-white: #FFFFFF;
+
+  /* Кампанейские оттенки — производные, не часть бренд-бука */
+  --ink: #0B0B0C;
+  --ink-raised: #141417;
+  --hairline: rgba(255, 255, 255, 0.07);
+  --grid: rgba(255, 255, 255, 0.035);
+
+  --font: "Helvetica Neue", Arial, "Arial Unicode MS", sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ─── Артборд ─────────────────────────────────────────── */
+
+.art {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--juno-white);
+  font-family: var(--font);
+  font-weight: 700;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* сетка как на торговом терминале */
+.art::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: var(--gridstep, 60px) var(--gridstep, 60px);
+}
+
+/* оранжевое свечение из нижнего левого угла */
+.art::after {
+  content: "";
+  position: absolute;
+  left: -20%; bottom: -35%;
+  width: 90%; aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(255,105,0,0.30) 0%, rgba(255,105,0,0) 68%);
+  pointer-events: none;
+}
+
+.art > * { position: relative; z-index: 2; }
+
+.art.is-loud { background: var(--juno-orange); color: var(--juno-black); }
+.art.is-loud::after { background: radial-gradient(circle, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0) 68%); }
+.art.is-loud::before { background-image:
+    linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px); }
+
+/* на оранжевом фоне свечи перекрашиваются в чёрный — иначе сливаются */
+.is-loud .chart rect { fill: var(--juno-black); opacity: 0.13; }
+
+/* ─── Каркас ──────────────────────────────────────────── */
+
+.frame {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding: var(--pad, 84px);
+}
+
+/* вертикальные форматы: смысловой блок по центру, служебные — прижаты к краям,
+   чтобы не проваливаться в пустоту под интерфейсом сторис */
+.art.tall .frame { justify-content: center; }
+.art.tall .top,
+.art.tall .bottom {
+  position: absolute;
+  left: var(--pad, 92px); right: var(--pad, 92px);
+}
+.art.tall .top { top: var(--pad, 92px); }
+.art.tall .bottom { bottom: var(--pad, 92px); }
+
+/* подложка под нижней строкой — отделяет CTA от свечей */
+.scrim {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 30%;
+  background: linear-gradient(to top, var(--ink) 4%, rgba(11,11,12,0.55) 45%, rgba(11,11,12,0) 100%);
+  z-index: 1;
+}
+.is-loud .scrim { display: none; }
+
+/* ─── Шапка ───────────────────────────────────────────── */
+
+.top { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+
+.wordmark {
+  font-size: var(--fs-mark, 26px);
+  letter-spacing: 0.30em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.wordmark b { color: var(--juno-orange); font-weight: 700; }
+.is-loud .wordmark b { color: var(--juno-black); }
+
+.chip {
+  font-size: var(--fs-chip, 18px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.55em 1.1em;
+  border: 2px solid var(--juno-orange);
+  color: var(--juno-orange);
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.is-loud .chip { border-color: rgba(0,0,0,0.55); color: var(--juno-black); }
+
+/* ─── Центральный блок ────────────────────────────────── */
+
+.mid { display: flex; flex-direction: column; gap: var(--gap, 26px); }
+
+.eyebrow {
+  font-size: var(--fs-eyebrow, 24px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--juno-orange);
+  font-weight: 700;
+}
+.is-loud .eyebrow { color: rgba(0,0,0,0.68); }
+
+.head {
+  font-size: var(--fs-head, 122px);
+  line-height: 0.90;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.head .hl { color: var(--juno-orange); }
+.is-loud .head .hl { color: var(--juno-white); }
+
+.sub {
+  font-size: var(--fs-sub, 30px);
+  line-height: 1.32;
+  font-weight: 400;
+  color: rgba(255,255,255,0.80);
+  max-width: 88%;
+}
+.is-loud .sub { color: rgba(0,0,0,0.78); }
+
+/* ─── Подвал ──────────────────────────────────────────── */
+
+.bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+
+.cta {
+  display: inline-block;
+  background: var(--juno-orange);
+  color: var(--juno-black);
+  font-size: var(--fs-cta, 26px);
+  letter-spacing: 0.04em;
+  padding: 0.72em 1.5em;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.is-loud .cta { background: var(--juno-black); color: var(--juno-orange); }
+
+.meta {
+  font-size: var(--fs-meta, 20px);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.52);
+  text-align: right;
+  line-height: 1.5;
+  font-weight: 400;
+}
+.is-loud .meta { color: rgba(0,0,0,0.62); }
+
+/* ─── Строка фактов ───────────────────────────────────── */
+
+.facts { display: flex; gap: var(--fact-gap, 46px); }
+.fact { display: flex; flex-direction: column; gap: 6px; }
+.fact .n {
+  font-size: var(--fs-fact, 52px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--juno-orange);
+}
+.is-loud .fact .n { color: var(--juno-black); }
+.fact .l {
+  font-size: var(--fs-factlabel, 17px);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  font-weight: 400;
+}
+.is-loud .fact .l { color: rgba(0,0,0,0.6); }
+
+/* ─── Пьедестал ───────────────────────────────────────── */
+
+.podium { display: flex; align-items: flex-end; gap: var(--pod-gap, 22px); }
+.pod {
+  flex: 1;
+  background: var(--ink-raised);
+  border: 2px solid var(--hairline);
+  border-radius: 14px;
+  padding: var(--pod-pad, 24px);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.pod.win { background: var(--juno-orange); border-color: var(--juno-orange); color: var(--juno-black); }
+.pod .rank { font-size: var(--fs-rank, 46px); line-height: 1; }
+.pod .prize {
+  font-size: var(--fs-prize, 21px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.3;
+}
+.pod.win .prize { color: rgba(0,0,0,0.78); }
+
+/* ─── Свечной график ──────────────────────────────────── */
+
+.chart { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; z-index: 1; opacity: 0.92; }
+
+/* ─── Всплывающее окно ────────────────────────────────── */
+
+.art.popup { background: var(--ink); border-radius: 18px; }
+.art.popup .frame { justify-content: center; gap: 18px; }

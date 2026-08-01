@@ -1,0 +1,198 @@
+[
+ {
+  "name": "post_teaser_RU",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_teaser_RU.html"
+ },
+ {
+  "name": "post_launch_RU",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_launch_RU.html"
+ },
+ {
+  "name": "post_remind_RU",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_remind_RU.html"
+ },
+ {
+  "name": "post_last_RU",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_last_RU.html"
+ },
+ {
+  "name": "post_week_RU",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_week_RU.html"
+ },
+ {
+  "name": "post_winners_RU",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_winners_RU.html"
+ },
+ {
+  "name": "post_inter_RU",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_inter_RU.html"
+ },
+ {
+  "name": "story_teaser_RU",
+  "size": "story",
+  "w": 1080,
+  "h": 1920,
+  "file": "story_teaser_RU.html"
+ },
+ {
+  "name": "story_launch_RU",
+  "size": "story",
+  "w": 1080,
+  "h": 1920,
+  "file": "story_launch_RU.html"
+ },
+ {
+  "name": "story_last_RU",
+  "size": "story",
+  "w": 1080,
+  "h": 1920,
+  "file": "story_last_RU.html"
+ },
+ {
+  "name": "tg_launch_RU",
+  "size": "wide",
+  "w": 1280,
+  "h": 720,
+  "file": "tg_launch_RU.html"
+ },
+ {
+  "name": "tg_week_RU",
+  "size": "wide",
+  "w": 1280,
+  "h": 720,
+  "file": "tg_week_RU.html"
+ },
+ {
+  "name": "mail_launch_RU",
+  "size": "mail",
+  "w": 1200,
+  "h": 400,
+  "file": "mail_launch_RU.html"
+ },
+ {
+  "name": "popup_RU",
+  "size": "popup",
+  "w": 640,
+  "h": 440,
+  "file": "popup_RU.html"
+ },
+ {
+  "name": "post_teaser_KZ",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_teaser_KZ.html"
+ },
+ {
+  "name": "post_launch_KZ",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_launch_KZ.html"
+ },
+ {
+  "name": "post_remind_KZ",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_remind_KZ.html"
+ },
+ {
+  "name": "post_last_KZ",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_last_KZ.html"
+ },
+ {
+  "name": "post_week_KZ",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_week_KZ.html"
+ },
+ {
+  "name": "post_winners_KZ",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_winners_KZ.html"
+ },
+ {
+  "name": "post_inter_KZ",
+  "size": "post",
+  "w": 1080,
+  "h": 1080,
+  "file": "post_inter_KZ.html"
+ },
+ {
+  "name": "story_teaser_KZ",
+  "size": "story",
+  "w": 1080,
+  "h": 1920,
+  "file": "story_teaser_KZ.html"
+ },
+ {
+  "name": "story_launch_KZ",
+  "size": "story",
+  "w": 1080,
+  "h": 1920,
+  "file": "story_launch_KZ.html"
+ },
+ {
+  "name": "story_last_KZ",
+  "size": "story",
+  "w": 1080,
+  "h": 1920,
+  "file": "story_last_KZ.html"
+ },
+ {
+  "name": "tg_launch_KZ",
+  "size": "wide",
+  "w": 1280,
+  "h": 720,
+  "file": "tg_launch_KZ.html"
+ },
+ {
+  "name": "tg_week_KZ",
+  "size": "wide",
+  "w": 1280,
+  "h": 720,
+  "file": "tg_week_KZ.html"
+ },
+ {
+  "name": "mail_launch_KZ",
+  "size": "mail",
+  "w": 1200,
+  "h": 400,
+  "file": "mail_launch_KZ.html"
+ },
+ {
+  "name": "popup_KZ",
+  "size": "popup",
+  "w": 640,
+  "h": 440,
+  "file": "popup_KZ.html"
+ }
+]

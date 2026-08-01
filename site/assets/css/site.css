@@ -1,0 +1,302 @@
+/* Trading Party — лендинг кампании
+   Цвета и типографика по бренд-буку JunoMarkets:
+   #FF6900 основной, #777777 вспомогательный, приоритет оранжевый > белый > чёрный. */
+
+:root {
+  --orange: #FF6900;
+  --orange-soft: #FF8A3D;
+  --grey: #777777;
+  --black: #000000;
+  --white: #FFFFFF;
+
+  --ink: #0B0B0C;
+  --ink-2: #131316;
+  --ink-3: #1B1B20;
+  --line: rgba(255, 255, 255, 0.09);
+  --text: rgba(255, 255, 255, 0.72);
+  --text-dim: rgba(255, 255, 255, 0.48);
+
+  --font: "Helvetica Neue", Arial, "Arial Unicode MS", sans-serif;
+  --wrap: 1140px;
+  --r: 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.wrap { width: min(var(--wrap), calc(100% - 48px)); margin-inline: auto; }
+
+section { padding: clamp(64px, 9vw, 120px) 0; position: relative; }
+
+h1, h2, h3 { line-height: 1.05; letter-spacing: -0.03em; font-weight: 700; }
+h2 { font-size: clamp(32px, 5vw, 54px); text-transform: uppercase; }
+h3 { font-size: 21px; letter-spacing: -0.01em; }
+p { color: var(--text); }
+
+.hl { color: var(--orange); }
+
+.eyebrow {
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 18px;
+}
+
+.lede { font-size: clamp(17px, 2vw, 20px); max-width: 62ch; margin-top: 20px; }
+
+/* ─── Кнопки ──────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--orange); color: var(--black);
+  font-weight: 700; font-size: 17px; line-height: 1.2;
+  padding: 17px 34px; border-radius: 100px;
+  text-decoration: none; border: 2px solid var(--orange);
+  transition: transform .18s ease, background .18s ease;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--orange-soft); border-color: var(--orange-soft); transform: translateY(-2px); }
+.btn.ghost { background: transparent; color: var(--white); border-color: var(--line); }
+.btn.ghost:hover { background: rgba(255,255,255,.05); border-color: var(--orange); transform: translateY(-2px); }
+
+/* ─── Шапка ───────────────────────────────────────────── */
+
+header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(11, 11, 12, 0.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.bar { display: flex; align-items: center; gap: 28px; height: 74px; }
+.logo { color: var(--orange); display: flex; align-items: center; flex-shrink: 0; }
+.logo svg { height: 26px; width: auto; display: block; }
+nav { margin-left: auto; display: flex; gap: 28px; }
+nav a {
+  color: var(--text); text-decoration: none; font-size: 15px;
+  transition: color .16s ease;
+}
+nav a:hover { color: var(--white); }
+
+/* в шапке кнопка компактнее, чем на первом экране —
+   иначе она перевешивает логотип и переключатель языка */
+.bar .btn { font-size: 15px; padding: 11px 24px; }
+
+.lang { display: flex; gap: 2px; background: var(--ink-3); border-radius: 100px; padding: 4px; }
+.lang button {
+  border: 0; background: transparent; color: var(--text-dim);
+  font: inherit; font-size: 13px; font-weight: 700;
+  padding: 7px 15px; border-radius: 100px; cursor: pointer;
+  transition: all .16s ease;
+}
+.lang button[aria-pressed="true"] { background: var(--orange); color: var(--black); }
+
+/* ─── Первый экран ────────────────────────────────────── */
+
+/* нижний отступ первого экрана = высота полосы со свечами,
+   чтобы график шёл под плашкой фактов, а не сквозь неё */
+.hero { --hero-foot: clamp(120px, 15vw, 200px);
+        padding-top: clamp(56px, 8vw, 92px); padding-bottom: var(--hero-foot); overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; z-index: 0;
+  left: -10%; top: 10%; width: 70%; aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(255,105,0,.20) 0%, rgba(255,105,0,0) 66%);
+  pointer-events: none;
+}
+.hero .wrap { position: relative; z-index: 2; }
+
+.hero h1 {
+  font-size: clamp(44px, 8.2vw, 104px);
+  text-transform: uppercase;
+  max-width: 15ch;
+}
+.hero .sub { font-size: clamp(18px, 2.2vw, 24px); max-width: 46ch; margin-top: 26px; color: var(--text); }
+.hero .acts { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px; align-items: center; }
+
+.chart-strip {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: var(--hero-foot); width: 100%;
+  z-index: 1; opacity: .55; pointer-events: none;
+  mask-image: linear-gradient(to top, #000 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, #000 55%, transparent 100%);
+}
+
+/* ─── Полоса фактов ───────────────────────────────────── */
+
+.facts {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: var(--r);
+  overflow: hidden; margin-top: 54px;
+}
+/* только прямые ячейки — иначе отступ достаётся и вложенным .n / .l */
+.facts > div { background: var(--ink); padding: 26px 24px; }
+.facts .n { font-size: clamp(26px, 3.4vw, 38px); font-weight: 700; color: var(--orange); line-height: 1.1; letter-spacing: -0.02em; }
+.facts .l { font-size: 13px; letter-spacing: .13em; text-transform: uppercase; color: var(--text-dim); margin-top: 7px; }
+
+/* ─── Обратный отсчёт ─────────────────────────────────── */
+
+.count { display: flex; gap: 10px; align-items: center; }
+.count .unit {
+  background: var(--ink-3); border: 1px solid var(--line);
+  border-radius: 12px; padding: 10px 14px; min-width: 66px; text-align: center;
+}
+.count .u-n { font-size: 24px; font-weight: 700; line-height: 1; }
+.count .u-l { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-top: 5px; }
+
+/* ─── Шаги ────────────────────────────────────────────── */
+
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 54px; }
+.step {
+  background: var(--ink-2); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 30px 26px 32px;
+  transition: border-color .2s ease, transform .2s ease;
+}
+.step:hover { border-color: rgba(255,105,0,.45); transform: translateY(-3px); }
+.step .i {
+  width: 44px; height: 44px; border-radius: 100px;
+  background: var(--orange); color: var(--black);
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 19px; margin-bottom: 20px;
+}
+.step p { font-size: 15.5px; margin-top: 10px; }
+
+/* ─── Призы ───────────────────────────────────────────── */
+
+.prizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 54px; }
+.prize {
+  background: var(--ink-2); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 32px 28px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.prize.first { background: var(--orange); border-color: var(--orange); color: var(--black); }
+.prize.first p, .prize.first .rank { color: rgba(0,0,0,.72); }
+.prize .rank { font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+.prize .what { font-size: clamp(22px, 2.6vw, 30px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+
+.prize-note {
+  margin-top: 18px; padding: 22px 26px;
+  background: var(--ink-2); border: 1px solid var(--line);
+  border-left: 3px solid var(--orange); border-radius: var(--r);
+}
+.prize-note p { color: var(--white); font-size: 16px; }
+
+/* ─── Правила ─────────────────────────────────────────── */
+
+.rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 50px; }
+.rule {
+  background: var(--ink-2); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 26px 24px;
+}
+.rule .n { font-size: 30px; font-weight: 700; color: var(--orange); letter-spacing: -0.02em; line-height: 1; }
+.rule .l { font-size: 15px; color: var(--text); margin-top: 9px; }
+
+.rules-key {
+  margin-top: 22px; padding: 24px 28px;
+  border: 1px solid rgba(255,105,0,.4); border-radius: var(--r);
+  background: linear-gradient(90deg, rgba(255,105,0,.11), rgba(255,105,0,0));
+}
+.rules-key p { color: var(--white); font-size: 16.5px; }
+
+/* ─── FAQ ─────────────────────────────────────────────── */
+
+.faq { margin-top: 46px; border-top: 1px solid var(--line); }
+details { border-bottom: 1px solid var(--line); }
+summary {
+  cursor: pointer; list-style: none;
+  padding: 24px 44px 24px 0; position: relative;
+  font-size: clamp(17px, 2vw, 20px); font-weight: 700; letter-spacing: -0.01em;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: "+"; position: absolute; right: 6px; top: 50%;
+  transform: translateY(-50%); font-size: 26px; color: var(--orange);
+  font-weight: 400; line-height: 1;
+}
+details[open] summary::after { content: "\2212"; }
+details .a { padding: 0 44px 26px 0; }
+details .a p { font-size: 16.5px; }
+
+/* ─── Регистрация ─────────────────────────────────────── */
+
+.reg { background: var(--ink-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.reg-box {
+  margin-top: 40px; border: 1px solid var(--line);
+  border-radius: var(--r); background: var(--ink); overflow: hidden;
+}
+.reg-box iframe { width: 100%; min-height: 620px; border: 0; display: block; }
+
+/* заглушка, пока вендор не выдал форму */
+.reg-slot {
+  padding: 60px 32px; text-align: center;
+  border: 2px dashed rgba(255,105,0,.42); border-radius: var(--r);
+  background: rgba(255,105,0,.045);
+}
+.reg-slot .tag {
+  display: inline-block; font-size: 12px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--orange); font-weight: 700;
+  border: 1px solid var(--orange); border-radius: 100px;
+  padding: 6px 14px; margin-bottom: 18px;
+}
+.reg-slot code {
+  display: inline-block; margin-top: 16px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px;
+  background: var(--ink-3); border: 1px solid var(--line);
+  border-radius: 8px; padding: 9px 14px; color: var(--orange);
+}
+
+/* ─── Подвал ──────────────────────────────────────────── */
+
+footer { padding: 60px 0 48px; border-top: 1px solid var(--line); }
+.foot-top { display: flex; flex-wrap: wrap; gap: 30px; justify-content: space-between; align-items: flex-start; }
+.foot-logo { color: var(--grey); }
+.foot-logo svg { height: 24px; width: auto; display: block; }
+.disclaimer {
+  margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--line);
+  font-size: 13.5px; line-height: 1.62; color: var(--text-dim); max-width: 92ch;
+}
+.disclaimer strong { color: var(--grey); }
+
+/* ─── Появление при скролле ───────────────────────────── */
+
+.rise { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+.rise.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rise { opacity: 1; transform: none; transition: none; }
+  .btn:hover, .step:hover { transform: none; }
+}
+
+/* ─── Адаптив ─────────────────────────────────────────── */
+
+@media (max-width: 980px) {
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .facts { grid-template-columns: repeat(2, 1fr); }
+  .prizes, .rules { grid-template-columns: repeat(2, 1fr); }
+  nav { display: none; }
+}
+
+@media (max-width: 620px) {
+  body { font-size: 16px; }
+  .wrap { width: calc(100% - 34px); }
+  .bar { height: 66px; gap: 14px; }
+  .bar .btn { font-size: 14px; padding: 10px 18px; }
+  .logo svg { height: 22px; }
+  .steps, .prizes, .rules, .facts { grid-template-columns: 1fr; }
+  .hero h1 { max-width: none; }
+  .hero .acts { flex-direction: column; align-items: stretch; }
+  .hero .acts .btn { justify-content: center; }
+  .count { justify-content: space-between; }
+  .count .unit { flex: 1; min-width: 0; }
+  .foot-top { flex-direction: column; }
+}
