@@ -300,3 +300,41 @@ footer { padding: 60px 0 48px; border-top: 1px solid var(--line); }
   .count .unit { flex: 1; min-width: 0; }
   .foot-top { flex-direction: column; }
 }
+
+/* ─── Медиа-ассеты: фото призов, фоны, иконки шагов ─── */
+
+/* фото-свечи в hero заменяют рисованный SVG-стрип */
+.chart-strip { display: none; }
+.hero {
+  background-image:
+    linear-gradient(180deg, rgba(11,11,12,.90) 0%, rgba(11,11,12,.60) 42%, rgba(11,11,12,.78) 100%),
+    url("../img/hero-bg.jpg");
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+}
+
+/* иконки шагов вместо цифр */
+.step .i {
+  background: rgba(255,105,0,.10);
+  width: 56px; height: 56px; font-size: 0;
+}
+.step .i img { width: 34px; height: 34px; display: block; }
+
+/* фото призов */
+.prize-img {
+  width: 100%; aspect-ratio: 3 / 2; object-fit: cover;
+  border-radius: 10px; margin-bottom: 6px;
+  background: #0e0e10; display: block;
+}
+.prize.first .prize-img { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+
+/* фон блока правил */
+#rules {
+  background-image:
+    linear-gradient(180deg, var(--ink) 0%, rgba(11,11,12,.88) 38%, rgba(11,11,12,.94) 100%),
+    url("../img/rules-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
