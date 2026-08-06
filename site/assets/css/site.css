@@ -8,6 +8,7 @@
   --grey: #777777;
   --black: #000000;
   --white: #FFFFFF;
+  --fg: #FFFFFF;          /* основной текст — переключается по теме */
 
   --ink: #0B0B0C;
   --ink-2: #131316;
@@ -27,7 +28,7 @@ html { scroll-behavior: smooth; }
 
 body {
   background: var(--ink);
-  color: var(--white);
+  color: var(--fg);
   font-family: var(--font);
   font-size: 17px;
   line-height: 1.6;
@@ -85,7 +86,7 @@ nav a {
   color: var(--text); text-decoration: none; font-size: 15px;
   transition: color .16s ease;
 }
-nav a:hover { color: var(--white); }
+nav a:hover { color: var(--fg); }
 
 /* в шапке кнопка компактнее, чем на первом экране —
    иначе она перевешивает логотип и переключатель языка */
@@ -188,7 +189,7 @@ nav a:hover { color: var(--white); }
   background: var(--ink-2); border: 1px solid var(--line);
   border-left: 3px solid var(--orange); border-radius: var(--r);
 }
-.prize-note p { color: var(--white); font-size: 16px; }
+.prize-note p { color: var(--fg); font-size: 16px; }
 
 /* ─── Правила ─────────────────────────────────────────── */
 
@@ -338,3 +339,86 @@ footer { padding: 60px 0 48px; border-top: 1px solid var(--line); }
   background-position: center;
   background-repeat: no-repeat;
 }
+
+/* ─── Форма регистрации (заявки → Google Sheets) ───── */
+
+.reg-form { display: flex; flex-direction: column; gap: 18px; padding: 30px; }
+.rf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rf-field { display: flex; flex-direction: column; gap: 8px; }
+.rf-field span { font-size: 13px; color: var(--text); letter-spacing: .01em; }
+.rf-field input {
+  background: var(--ink); border: 1px solid var(--line); border-radius: 12px;
+  color: var(--fg); font: inherit; font-size: 15px; padding: 13px 15px;
+  transition: border-color .15s ease;
+}
+.rf-field input::placeholder { color: var(--text-dim); }
+.rf-field input:focus { outline: none; border-color: var(--orange); }
+.rf-field input:user-invalid { border-color: #E5484D; }
+
+.rf-check { display: flex; gap: 11px; align-items: flex-start; font-size: 14px; color: var(--text); line-height: 1.45; cursor: pointer; }
+.rf-check input { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--orange); flex-shrink: 0; }
+.rf-check a { color: var(--orange); }
+
+/* honeypot — скрыт от людей, приманка для ботов */
+.rf-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+.rf-submit { align-self: flex-start; margin-top: 2px; }
+.rf-submit:disabled { opacity: .6; cursor: default; transform: none; }
+
+.rf-msg { font-size: 14.5px; min-height: 1em; }
+.rf-msg.ok { color: #35C46B; }
+.rf-msg.err { color: #E5484D; }
+
+@media (max-width: 620px) {
+  .reg-form { padding: 22px; }
+  .rf-row { grid-template-columns: 1fr; }
+  .rf-submit { align-self: stretch; justify-content: center; }
+}
+
+/* ─── Постер призов ─────────────────────────────────── */
+.prize-showcase {
+  display: block; width: 100%; max-width: 520px;
+  margin: 34px auto 6px; border-radius: 16px;
+  border: 1px solid var(--line);
+}
+
+/* ─── Светлая / тёмная тема ─────────────────────────── */
+
+:root[data-theme="light"] {
+  --ink:   #F4F4F6;   /* фон страницы */
+  --ink-2: #FFFFFF;   /* поверхность карточек */
+  --ink-3: #EAEAEE;   /* поля ввода, мягкие плашки */
+  --line:  rgba(0, 0, 0, 0.10);
+  --text:  rgba(0, 0, 0, 0.66);
+  --text-dim: rgba(0, 0, 0, 0.45);
+  --fg: #15151A;      /* основной текст */
+}
+
+/* hero и блок правил — тёмные фото-полосы в ЛЮБОЙ теме:
+   локально возвращаем тёмную палитру, поэтому текст/карточки внутри остаются светлыми */
+.hero, #rules {
+  --ink:   #0B0B0C;
+  --ink-2: #141417;
+  --ink-3: #1B1B20;
+  --line:  rgba(255, 255, 255, 0.09);
+  --text:  rgba(255, 255, 255, 0.72);
+  --text-dim: rgba(255, 255, 255, 0.45);
+  --fg: #FFFFFF;
+  color: var(--fg);
+}
+
+/* шапка в светлой теме — светлое стекло */
+:root[data-theme="light"] header { background: rgba(244, 244, 246, 0.82); }
+
+/* переключатель темы */
+.theme-toggle {
+  width: 38px; height: 38px; flex-shrink: 0;
+  display: grid; place-items: center;
+  background: var(--ink-3); border: 0; border-radius: 100px;
+  color: var(--text); cursor: pointer; transition: color .16s ease, background .16s ease;
+}
+.theme-toggle:hover { color: var(--fg); }
+.theme-toggle svg { width: 18px; height: 18px; display: block; }
+.theme-toggle .ic-moon { display: none; }
+:root[data-theme="light"] .theme-toggle .ic-sun { display: none; }
+:root[data-theme="light"] .theme-toggle .ic-moon { display: block; }

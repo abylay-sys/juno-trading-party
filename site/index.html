@@ -15,6 +15,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="assets/img/og.jpg">
 <link rel="icon" href="assets/img/junomarkets-symbol.svg">
+<script>/* тема до отрисовки — без мигания; ?theme=light|dark даёт разовый предпросмотр */(function(){try{var q=new URLSearchParams(location.search).get('theme');var t=q||localStorage.getItem('tp-theme')||((window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
@@ -45,6 +46,10 @@
       <a href="#rules" data-i18n="nav.rules"></a>
       <a href="#faq" data-i18n="nav.faq"></a>
     </nav>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Светлая или тёмная тема">
+      <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>
+      <svg class="ic-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
     <div class="lang" role="group" aria-label="Тіл / Язык">
       <button type="button" data-lang="ru" aria-pressed="true">RU</button>
       <button type="button" data-lang="kz" aria-pressed="false">KZ</button>
@@ -112,19 +117,17 @@
       <div class="eyebrow" data-i18n="prizes.eyebrow"></div>
       <h2 data-i18n="prizes.h2"></h2>
       <p class="lede" data-i18n="prizes.lede"></p>
+      <img class="prize-showcase rise" src="assets/img/prize-showcase.jpg" alt="Призы Trading Party: MacBook Air за 1 место, iPhone за 2 место, планшет Huawei за 3 место" loading="lazy">
       <div class="prizes">
         <article class="prize first rise">
-          <img class="prize-img" src="assets/img/prize-1.jpg" alt="MacBook Air" loading="lazy">
           <div class="rank" data-i18n="prize.1.r"></div>
           <div class="what" data-i18n="prize.1.w"></div>
         </article>
         <article class="prize rise">
-          <img class="prize-img" src="assets/img/prize-2.jpg" alt="iPhone" loading="lazy">
           <div class="rank" data-i18n="prize.2.r"></div>
           <div class="what" data-i18n="prize.2.w"></div>
         </article>
         <article class="prize rise">
-          <img class="prize-img" src="assets/img/prize-3.jpg" alt="Huawei" loading="lazy">
           <div class="rank" data-i18n="prize.3.r"></div>
           <div class="what" data-i18n="prize.3.w"></div>
         </article></div>
@@ -203,12 +206,35 @@
       <h2 data-i18n="reg.h2"></h2>
       <p class="lede" data-i18n="reg.lede"></p>
       <div class="reg-box" id="reg-box">
-        <div class="reg-slot">
-          <div class="tag" data-i18n="reg.slot.tag"></div>
-          <h3 data-i18n="reg.slot.t"></h3>
-          <p style="max-width:52ch;margin:12px auto 0" data-i18n="reg.slot.d"></p>
-          <code>TP_CONFIG.registrationUrl</code>
-        </div>
+        <form id="reg-form" class="reg-form" novalidate>
+          <div class="rf-row">
+            <label class="rf-field">
+              <span data-i18n="reg.form.name"></span>
+              <input type="text" name="name" autocomplete="name" required>
+            </label>
+            <label class="rf-field">
+              <span data-i18n="reg.form.phone"></span>
+              <input type="tel" name="phone" autocomplete="tel" required>
+            </label>
+          </div>
+          <div class="rf-row">
+            <label class="rf-field">
+              <span data-i18n="reg.form.email"></span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+            <label class="rf-field">
+              <span data-i18n="reg.form.telegram"></span>
+              <input type="text" name="telegram" placeholder="@username" autocomplete="off">
+            </label>
+          </div>
+          <label class="rf-check">
+            <input type="checkbox" name="consent" required>
+            <span data-i18n="reg.form.consent"></span>
+          </label>
+          <input type="text" name="website" class="rf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button type="submit" class="btn rf-submit" data-i18n="reg.form.submit"></button>
+          <div class="rf-msg" id="rf-msg" role="status" aria-live="polite"></div>
+        </form>
       </div>
     </div>
   </section>
@@ -229,10 +255,13 @@
 /* ── Настройки кампании. Правится здесь. ──────────────────────
    registrationEnds  — дата и время закрытия регистрации (ISO, +05:00 Астана).
                        Пока пусто — блок обратного отсчёта скрыт.
-   registrationUrl   — ссылка на форму от платформы конкурса.
-                       Пока пусто — на месте формы стоит заглушка.          */
+   sheetEndpoint     — URL веб-приложения Apps Script (заявки → Google Sheets).
+                       Пусто — форма показывает «приём заявок ещё настраивается».
+   registrationUrl   — ссылка на внешнюю форму (напр. FYNXT). Если задана —
+                       она приоритетнее и заменяет нашу форму на iframe.       */
 window.TP_CONFIG = {
   registrationEnds: "",
+  sheetEndpoint: "",
   registrationUrl: ""
 };
 </script>
