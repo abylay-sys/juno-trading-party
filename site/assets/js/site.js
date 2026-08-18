@@ -25,6 +25,10 @@
       if (v != null) el.innerHTML = v;
     });
 
+    // Страница условий: полный текст T&C v3 хранится в window.TERMS[lang]
+    var tb = document.getElementById("terms-body");
+    if (tb && window.TERMS && window.TERMS[lang]) tb.innerHTML = window.TERMS[lang];
+
     document.documentElement.lang = lang === "kz" ? "kk" : "ru";
     if (dict["meta.title"]) document.title = dict["meta.title"];
     var md = document.querySelector('meta[name="description"]');
