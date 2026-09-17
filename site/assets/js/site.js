@@ -7,6 +7,26 @@
   var DEFAULT_LANG = "ru";
   var STORE_KEY = "tp-lang";
 
+  /* ─── URL-параметры: язык + UTM (из письма) ─────────── */
+  var PARAMS = (function () {
+    try { return new URLSearchParams(location.search); } catch (e) { return new URLSearchParams(""); }
+  })();
+  function paramLang() {
+    var l = (PARAMS.get("lang") || "").toLowerCase();
+    return (l === "kz" || l === "ru") ? l : null;
+  }
+  // Ссылка регистрации на портале + проброс UTM из входящей ссылки письма
+  function portalUrl() {
+    var base = CONFIG.registrationUrl;
+    if (!base) return null;
+    var utm = [];
+    ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach(function (k) {
+      var v = PARAMS.get(k);
+      if (v) utm.push(k + "=" + encodeURIComponent(v));
+    });
+    return utm.length ? base + (base.indexOf("?") < 0 ? "?" : "&") + utm.join("&") : base;
+  }
+
   /* ─── Язык ─────────────────────────────────────────── */
 
   function saved() {
@@ -116,14 +136,15 @@
     var box = document.getElementById("reg-box");
     if (!box) return;
 
-    // приоритет — внешняя форма, если её ссылку проставили
+    // приоритет — регистрация на портале: кнопка-редирект + проброс UTM
+    // (не iframe: портал блокирует вставку через X-Frame-Options)
     if (CONFIG.registrationUrl) {
-      var f = document.createElement("iframe");
-      f.src = CONFIG.registrationUrl;
-      f.title = "Trading Party";
-      f.loading = "lazy";
-      box.innerHTML = "";
-      box.appendChild(f);
+      var url = portalUrl();
+      var dict = window.COPY[currentLang()] || {};
+      box.innerHTML = '<a class="btn rf-portal" data-i18n="reg.portal.btn" href="' + url + '">' +
+                      (dict["reg.portal.btn"] || "Регистрация на портале →") + '</a>';
+      // hero/nav-кнопки, ведшие на #reg, — сразу на портал
+      document.querySelectorAll('a[href="#reg"]').forEach(function (a) { a.setAttribute("href", url); });
       return;
     }
 
@@ -187,5 +208,5 @@
 
   /* ─── Старт ────────────────────────────────────────── */
 
-  apply(saved() || DEFAULT_LANG);
+  apply(paramLang() || saved() || DEFAULT_LANG);
 })();
