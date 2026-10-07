@@ -24,9 +24,9 @@ function doPost(e) {
     if (p.website) return ok_();               // honeypot — тихо игнорируем ботов
     var sh = sheet_();
     sh.appendRow([
-      now_(), p.name || '', p.phone || '', p.email || '', p.lang || '',
-      p.utm_source || '', p.utm_medium || '', p.utm_campaign || '', p.utm_content || '', p.utm_term || '',
-      p.page || '', p.source || '', String(p.ua || '').slice(0, 200)
+      now_(), t_(p.name), t_(p.phone), t_(p.email), t_(p.lang),
+      t_(p.utm_source), t_(p.utm_medium), t_(p.utm_campaign), t_(p.utm_content), t_(p.utm_term),
+      t_(p.page), t_(p.source), t_(String(p.ua || '').slice(0, 200))
     ]);
     return ok_();
   } catch (err) {
@@ -52,6 +52,12 @@ function sheet_() {
 
 function now_() {
   return Utilities.formatDate(new Date(), 'Asia/Almaty', 'yyyy-MM-dd HH:mm:ss');
+}
+// Пишем как текст: ведущие = + - @ Sheets принимает за формулу (+7… → #ERROR!),
+// плюс это защита от formula-инъекции в полях.
+function t_(v) {
+  v = (v == null) ? '' : String(v);
+  return /^[=+\-@]/.test(v) ? ("'" + v) : v;
 }
 function ok_() { return json_({ ok: true }); }
 function json_(o) {
