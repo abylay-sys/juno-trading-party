@@ -6,6 +6,8 @@
 <title>Открой реальный счёт — Juno Markets</title>
 <meta name="description" content="Открой реальный счёт в Juno Markets: вывод средств за 3–5 минут на любой банк Казахстана, поддержка на казахском и русском.">
 <meta name="robots" content="noindex">
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1473173323693552');fbq('track','PageView');</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0B0B0C;--card:#141416;--line:rgba(255,255,255,.1);--orange:#FF6900;--orange2:#FF8A3D;--ink:#F3F3F5;--dim:rgba(255,255,255,.62);--font:"Helvetica Neue",Arial,"Arial Unicode MS",sans-serif}
@@ -169,7 +171,7 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12px;color
     var data=new URLSearchParams(body);
     var orig=btn.textContent; btn.disabled=true; btn.textContent=d.sending; show("","");
     fetch(EP,{method:"POST",mode:"no-cors",body:data})
-      .then(function(){ document.querySelector(".form-wrap").classList.add("hide"); document.getElementById("done").classList.add("on"); })
+      .then(function(){ try{fbq('track','Lead',{content_name:'open'});}catch(e){} document.querySelector(".form-wrap").classList.add("hide"); document.getElementById("done").classList.add("on"); })
       .catch(function(){ show(d.err,"err"); })
       .then(function(){ btn.disabled=false; btn.textContent=orig; });
   });
